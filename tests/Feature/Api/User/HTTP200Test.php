@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use App\Models\Contact;
 use Laravel\Sanctum\Sanctum;
 
 
@@ -11,55 +10,55 @@ describe('200', function () {
 
         Sanctum::actingAs(
             User::factory()->create(),
-            ['contacts-store']
+            ['users-store']
         );
 
-        $this->postJson(route('contacts.store'), data)
+        $this->postJson(route('users.store'), userData)
             ->assertOk();
     });
 
     test('authorized index api', function () {
         Sanctum::actingAs(
             User::factory()->create(),
-            ['contacts-index']
+            ['users-index']
         );
 
-        $this->getJson(route('contacts.index'))
+        $this->getJson(route('users.index'))
             ->assertOk();
     });
 
     test('authorized show api', function () {
         Sanctum::actingAs(
             User::factory()->create(),
-            ['contacts-show']
+            ['users-show']
         );
 
-        $this->getJson(route('contacts.show', 1))
+        $this->getJson(route('users.show', 1))
             ->assertOk();
     });
 
     test('authorized update api', function () {
         Sanctum::actingAs(
             User::factory()->create(),
-            ['contacts-update']
+            ['users-update']
         );
 
-        $contact = Contact::factory()->create();
+        $user = User::factory()->create();
 
-        $this->putJson(route('contacts.update', $contact->id), updatedData)
+        $this->putJson(route('users.update', $user->id), updatedUserData)
             ->assertOk();
     });
 
     test('authorized destroy api', function () {
         Sanctum::actingAs(
             User::factory()->create(),
-            ['contacts-destroy']
+            ['users-destroy']
         );
 
-        $contact = Contact::factory()->create();
+        $user = User::factory()->create();
 
-        $this->deleteJson(route('contacts.destroy', $contact->id))
+        $this->deleteJson(route('users.destroy', $user->id))
             ->assertOk();
-        $this->assertDatabaseMissing('contacts', ['id' => $contact->id]);
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
     });
 });

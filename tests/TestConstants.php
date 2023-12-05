@@ -25,3 +25,16 @@ const updatedData = [
     'contact_groups' => '',
     'role' => 'admin'
 ];
+
+const userData = [
+    'name' => 'User',
+    'email' => 'user@example.com',
+    'password' => 'password',
+    'role' => 'user'
+];
+const updatedUserData = [
+    'name' => 'Updated User',
+    'password' => 'password',
+    'email' => 'updateduser@example.com',
+    'role' => 'user'
+];

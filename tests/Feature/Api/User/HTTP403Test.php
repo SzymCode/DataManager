@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use App\Models\Contact;
 use Laravel\Sanctum\Sanctum;
 
 beforeEach(function () {
@@ -14,38 +13,38 @@ beforeEach(function () {
 
 describe('403', function () {
     test('unauthorized token index api', function () {
-        $this->getJson(route('contacts.index'))
+        $this->getJson(route('users.index'))
             ->assertStatus(403);
     });
     test('unauthorized token show api', function () {
-        $this->getJson(route('contacts.show', 1))
+        $this->getJson(route('users.show', 1))
             ->assertStatus(403);
     });
     test('unauthorized token store api', function () {
-        $this->postJson(route('contacts.store'), data)
+        $this->postJson(route('users.store'), data)
             ->assertStatus(403);
     });
     test('unauthorized token update api', function () {
-        $contact = Contact::factory()->create();
+        $user = User::factory()->create();
 
-        $this->putJson(route('contacts.update', $contact->id), data)
+        $this->putJson(route('users.update', $user->id), data)
             ->assertStatus(403);
     });
     test('unauthorized token store api empty json', function () {
-        $this->postJson(route('contacts.store'))
+        $this->postJson(route('users.store'))
             ->assertStatus(403);
     });
     test('unauthorized token update api empty json', function () {
-        $contact = Contact::factory()->create();
+        $user = User::factory()->create();
 
-        $this->putJson(route('contacts.update', $contact->id))
+        $this->putJson(route('users.update', $user->id))
             ->assertStatus(403);
     });
     test('unauthorized token destroy api', function () {
-        $contact = Contact::factory()->create();
+        $user = User::factory()->create();
 
-        $this->deleteJson(route('contacts.destroy', $contact->id))
+        $this->deleteJson(route('users.destroy', $user->id))
             ->assertStatus(403);
-        $this->assertDatabaseHas('contacts', ['id' => $contact->id]);
+        $this->assertDatabaseHas('users', ['id' => $user->id]);
     });
 });

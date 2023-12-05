@@ -11,23 +11,12 @@ beforeEach(function() {
 });
 
 
-function validatePutData($data, $status, $expectedJsonStructure, $validationErrors): Closure
-{
-    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
-        $this->putJson(route('contacts.update', 1), $data)
-            ->assertStatus($status)
-            ->assertJsonStructure($expectedJsonStructure)
-            ->assertJsonValidationErrors($validationErrors);
-    };
-}
-
-
 describe('422 > PUT', function() {
-    /*
+    /**
      * USER ID TESTS
      */
     $data['user_id'] = '';
-    test('validation error no user_id', validatePutData(
+    test('validation error no user_id', validateContactPutData(
         $data,
         422,
         ['errors' => ['user_id']],
@@ -35,7 +24,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['user_id'] = [];
-    test('validation error invalid user_id array', validatePutData(
+    test('validation error invalid user_id array', validateContactPutData(
         $data,
         422,
         ['errors' => ['user_id']],
@@ -43,7 +32,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['user_id'] = 'user_id';
-    test('validation error invalid user_id string', validatePutData(
+    test('validation error invalid user_id string', validateContactPutData(
         $data,
         422,
         ['errors' => ['user_id']],
@@ -51,7 +40,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['user_id'] = false;
-    test('validation error invalid user_id false', validatePutData(
+    test('validation error invalid user_id false', validateContactPutData(
         $data,
         422,
         ['errors' => ['user_id']],
@@ -60,11 +49,11 @@ describe('422 > PUT', function() {
     $data['user_id'] = updatedData['user_id']; // reset user_id value
 
 
-    /*
+    /**
      * FIRST NAME TESTS
      */
     $data['first_name'] = '';
-    test('validation error no first_name', validatePutData(
+    test('validation error no first_name', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -72,7 +61,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['first_name'] = [];
-    test('validation error first_name array', validatePutData(
+    test('validation error first_name array', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -80,7 +69,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['first_name'] = 1;
-    test('validation error first_name integer', validatePutData(
+    test('validation error first_name integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -88,7 +77,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['first_name'] = false;
-    test('validation error first_name false', validatePutData(
+    test('validation error first_name false', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -96,7 +85,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['first_name'] = true;
-    test('validation error first_name true', validatePutData(
+    test('validation error first_name true', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -104,7 +93,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['first_name'] = 'L';
-    test('validation error first_name too short', validatePutData(
+    test('validation error first_name too short', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -112,7 +101,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['first_name'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
-    test('validation error first_name too long', validatePutData(
+    test('validation error first_name too long', validateContactPutData(
         $data,
         422,
         ['errors' => ['first_name']],
@@ -121,11 +110,11 @@ describe('422 > PUT', function() {
     $data['first_name'] = updatedData['first_name']; // reset first_name value
 
 
-    /*
+    /**
      * LAST NAME TESTS
      */
     $data['last_name'] = [];
-    test('validation error last_name array', validatePutData(
+    test('validation error last_name array', validateContactPutData(
         $data,
         422,
         ['errors' => ['last_name']],
@@ -133,7 +122,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['last_name'] = 1;
-    test('validation error last_name integer', validatePutData(
+    test('validation error last_name integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['last_name']],
@@ -141,7 +130,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['last_name'] = false;
-    test('validation error last_name false', validatePutData(
+    test('validation error last_name false', validateContactPutData(
         $data,
         422,
         ['errors' => ['last_name']],
@@ -149,7 +138,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['last_name'] = true;
-    test('validation error last_name true', validatePutData(
+    test('validation error last_name true', validateContactPutData(
         $data,
         422,
         ['errors' => ['last_name']],
@@ -157,7 +146,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['last_name'] = 'L';
-    test('validation error last_name too short', validatePutData(
+    test('validation error last_name too short', validateContactPutData(
         $data,
         422,
         ['errors' => ['last_name']],
@@ -165,7 +154,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['last_name'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
-    test('validation error last_name too long', validatePutData(
+    test('validation error last_name too long', validateContactPutData(
         $data,
         422,
         ['errors' => ['last_name']],
@@ -175,11 +164,11 @@ describe('422 > PUT', function() {
 
 
 
-    /*
+    /**
      * EMAIL TESTS
      */
     $data['email'] = 'admin.example.com';
-    test('validation error wrong email format', validatePutData(
+    test('validation error wrong email format', validateContactPutData(
         $data,
         422,
         ['errors' => ['email']],
@@ -187,7 +176,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['email'] = [];
-    test('validation error email array', validatePutData(
+    test('validation error email array', validateContactPutData(
         $data,
         422,
         ['errors' => ['email']],
@@ -195,7 +184,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['email'] = 1;
-    test('validation error email integer', validatePutData(
+    test('validation error email integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['email']],
@@ -203,7 +192,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['email'] = false;
-    test('validation error email false', validatePutData(
+    test('validation error email false', validateContactPutData(
         $data,
         422,
         ['errors' => ['email']],
@@ -211,7 +200,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['email'] = true;
-    test('validation error email true', validatePutData(
+    test('validation error email true', validateContactPutData(
         $data,
         422,
         ['errors' => ['email']],
@@ -221,11 +210,11 @@ describe('422 > PUT', function() {
 
 
 
-    /*
+    /**
      * PERSONAL PHONE TESTS
      */
     $data['personal_phone'] = [];
-    test('validation error personal_phone array', validatePutData(
+    test('validation error personal_phone array', validateContactPutData(
         $data,
         422,
         ['errors' => ['personal_phone']],
@@ -237,7 +226,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['personal_phone'] = false;
-    test('validation error personal_phone false', validatePutData(
+    test('validation error personal_phone false', validateContactPutData(
         $data,
         422,
         ['errors' => ['personal_phone']],
@@ -248,7 +237,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['personal_phone'] = true;
-    test('validation error personal_phone true', validatePutData(
+    test('validation error personal_phone true', validateContactPutData(
         $data,
         422,
         ['errors' => ['personal_phone']],
@@ -259,7 +248,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['personal_phone'] = '9876543';
-    test('validation error personal_phone too short', validatePutData(
+    test('validation error personal_phone too short', validateContactPutData(
         $data,
         422,
         ['errors' => ['personal_phone']],
@@ -267,7 +256,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['personal_phone'] = '98 76 543 210 123';
-    test('validation error personal_phone too long', validatePutData(
+    test('validation error personal_phone too long', validateContactPutData(
         $data,
         422,
         ['errors' => ['personal_phone']],
@@ -284,7 +273,7 @@ describe('422 > PUT', function() {
      * WORK PHONE TESTS
      */
     $data['work_phone'] = [];
-    test('validation error work_phone array', validatePutData(
+    test('validation error work_phone array', validateContactPutData(
         $data,
         422,
         ['errors' => ['work_phone']],
@@ -296,7 +285,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['work_phone'] = false;
-    test('validation error work_phone false', validatePutData(
+    test('validation error work_phone false', validateContactPutData(
         $data,
         422,
         ['errors' => ['work_phone']],
@@ -307,7 +296,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['work_phone'] = true;
-    test('validation error work_phone true', validatePutData(
+    test('validation error work_phone true', validateContactPutData(
         $data,
         422,
         ['errors' => ['work_phone']],
@@ -318,7 +307,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['work_phone'] = '9876543';
-    test('validation error work_phone too short', validatePutData(
+    test('validation error work_phone too short', validateContactPutData(
         $data,
         422,
         ['errors' => ['work_phone']],
@@ -328,7 +317,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['work_phone'] = '98 76 543 210 123';
-    test('validation error work_phone too long', validatePutData(
+    test('validation error work_phone too long', validateContactPutData(
         $data,
         422,
         ['errors' => ['work_phone']],
@@ -341,11 +330,11 @@ describe('422 > PUT', function() {
 
 
 
-    /*
+    /**
      * ADDRESS TESTS
      */
     $data['address'] = [];
-    test('validation error address array', validatePutData(
+    test('validation error address array', validateContactPutData(
         $data,
         422,
         ['errors' => ['address']],
@@ -353,7 +342,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['address'] = 1;
-    test('validation error address integer', validatePutData(
+    test('validation error address integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['address']],
@@ -361,7 +350,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['address'] = false;
-    test('validation error address false', validatePutData(
+    test('validation error address false', validateContactPutData(
         $data,
         422,
         ['errors' => ['address']],
@@ -369,7 +358,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['address'] = true;
-    test('validation error address true', validatePutData(
+    test('validation error address true', validateContactPutData(
         $data,
         422,
         ['errors' => ['address']],
@@ -377,7 +366,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['address'] = 'Lorem ipsum.';
-    test('validation error address too short', validatePutData(
+    test('validation error address too short', validateContactPutData(
         $data,
         422,
         ['errors' => ['address']],
@@ -385,7 +374,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['address'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';
-    test('validation error address too long', validatePutData(
+    test('validation error address too long', validateContactPutData(
         $data,
         422,
         ['errors' => ['address']],
@@ -395,11 +384,11 @@ describe('422 > PUT', function() {
 
 
 
-    /*
+    /**
      * BIRTHDAY TESTS
      */
     $data['birthday'] = [];
-    test('validation error birthday array', validatePutData(
+    test('validation error birthday array', validateContactPutData(
         $data,
         422,
         ['errors' => ['birthday']],
@@ -407,7 +396,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['birthday'] = 'birthday';
-    test('validation error birthday string', validatePutData(
+    test('validation error birthday string', validateContactPutData(
         $data,
         422,
         ['errors' => ['birthday']],
@@ -415,7 +404,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['birthday'] = 1;
-    test('validation error birthday integer', validatePutData(
+    test('validation error birthday integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['birthday']],
@@ -423,7 +412,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['birthday'] = false;
-    test('validation error birthday false', validatePutData(
+    test('validation error birthday false', validateContactPutData(
         $data,
         422,
         ['errors' => ['birthday']],
@@ -431,7 +420,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['birthday'] = true;
-    test('validation error birthday true', validatePutData(
+    test('validation error birthday true', validateContactPutData(
         $data,
         422,
         ['errors' => ['birthday']],
@@ -439,7 +428,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['birthday'] = '30.30.2023';
-    test('validation error birthday invalid date', validatePutData(
+    test('validation error birthday invalid date', validateContactPutData(
         $data,
         422,
         ['errors' => ['birthday']],
@@ -453,7 +442,7 @@ describe('422 > PUT', function() {
      * CONTACT GROUPS TESTS
      */
     $data['contact_groups'] = [];
-    test('validation error contact groups array', validatePutData(
+    test('validation error contact groups array', validateContactPutData(
         $data,
         422,
         ['errors' => ['contact_groups']],
@@ -461,7 +450,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['contact_groups'] = [1];
-    test('validation error contact groups array integer', validatePutData(
+    test('validation error contact groups array integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['contact_groups']],
@@ -469,7 +458,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['contact_groups'] = 'contact_groups';
-    test('validation error contact groups string', validatePutData(
+    test('validation error contact groups string', validateContactPutData(
         $data,
         422,
         ['errors' => ['contact_groups']],
@@ -479,11 +468,11 @@ describe('422 > PUT', function() {
 
 
 
-    /*
+    /**
      * ROLE TESTS
      */
     $data['role'] = [];
-    test('validation error role array', validatePutData(
+    test('validation error role array', validateContactPutData(
         $data,
         422,
         ['errors' => ['role']],
@@ -494,7 +483,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['role'] = 1;
-    test('validation error role integer', validatePutData(
+    test('validation error role integer', validateContactPutData(
         $data,
         422,
         ['errors' => ['role']],
@@ -505,7 +494,7 @@ describe('422 > PUT', function() {
     ));
 
     $data['role'] = 'invalid';
-    test('validation error role invalid', validatePutData(
+    test('validation error role invalid', validateContactPutData(
         $data,
         422,
         ['errors' => ['role']],

@@ -23,14 +23,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('users')->controller(UserController::class)->group(function () {
         Route::get('/', 'index')
+            ->name('users.index')
             ->middleware('abilities:users-index');
         Route::get('/{id}', 'show')
+            ->name('users.show')
             ->middleware('abilities:users-show');
         Route::post('/', 'store')
+            ->name('users.store')
             ->middleware('abilities:users-store');
         Route::put('/{id}', 'update')
+            ->name('users.update')
             ->middleware('abilities:users-update');
-        Route::post('/{id}', 'destroy')
+        Route::delete('/{id}', 'destroy')
+            ->name('users.destroy')
             ->middleware('abilities:users-destroy');
     });
 

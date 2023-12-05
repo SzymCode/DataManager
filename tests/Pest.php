@@ -11,6 +11,12 @@
 |
 */
 
+$data = require_once 'tests\TestConstants.php';
+$updatedData = require_once 'tests\TestConstants.php';
+$userData = require_once 'tests\TestConstants.php';
+$updatedUserData = require_once 'tests\TestConstants.php';
+$adminData = require_once 'tests\TestConstants.php';
+
 uses(
     Tests\TestCase::class,
     // Illuminate\Foundation\Testing\RefreshDatabase::class,
@@ -43,11 +49,45 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function validateContactPostData($data, $status, $expectedJsonStructure, $validationErrors): Closure
 {
-    // ..
+    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
+        $this->postJson(route('contacts.store'), $data)
+            ->assertStatus($status)
+            ->assertJsonStructure($expectedJsonStructure)
+            ->assertJsonValidationErrors($validationErrors);
+    };
 }
 
+function validateContactPutData($data, $status, $expectedJsonStructure, $validationErrors): Closure
+{
+    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
+        $this->putJson(route('contacts.update', 1), $data)
+            ->assertStatus($status)
+            ->assertJsonStructure($expectedJsonStructure)
+            ->assertJsonValidationErrors($validationErrors);
+    };
+}
+
+function validateUserPostData($userData, $status, $expectedJsonStructure, $validationErrors): Closure
+{
+    return function () use ($userData, $status, $expectedJsonStructure, $validationErrors) {
+        $this->postJson(route('users.store'), $userData)
+            ->assertStatus($status)
+            ->assertJsonStructure($expectedJsonStructure)
+            ->assertJsonValidationErrors($validationErrors);
+    };
+}
+
+function validateUserPutData($data, $status, $expectedJsonStructure, $validationErrors): Closure
+{
+    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
+        $this->putJson(route('users.update', 1), $data)
+            ->assertStatus($status)
+            ->assertJsonStructure($expectedJsonStructure)
+            ->assertJsonValidationErrors($validationErrors);
+    };
+}
 
 // TEST GROUPS
 

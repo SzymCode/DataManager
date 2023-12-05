@@ -3,34 +3,31 @@
 namespace App\Models;
 
 use App\Contracts\ContactShouldReceiveFields;
-use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
 /**
- * @property int id
- * @property int user_id
- * @property string first_name
- * @property string last_name
- * @property string email
- * @property string personal_phone
- * @property string work_phone
- * @property string address
- * @property DateTime birthday
- * @property array contact_groups
- * @property string role
+ *  Fix error: Property accessed via magic method
+ *
+ * @property integer $id
+ * @property integer $user_id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string|null $personal_phone
+ * @property string|null $work_phone
+ * @property string|null $address
+ * @property string|null $birthday
+ * @property mixed|null $contact_groups
+ * @property string $role
+ * @property integer $created_at
+ * @property integer $updated_at
  */
-
 class Contact extends Model implements ContactShouldReceiveFields
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string, string, string, string, string, string, DateTime, array, string>
-     */
     protected $fillable = [
         'user_id',
         'first_name',
@@ -44,6 +41,16 @@ class Contact extends Model implements ContactShouldReceiveFields
         'role'
     ];
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
     public function getUserId(): int
     {
         return $this->user_id;
@@ -53,5 +60,9 @@ class Contact extends Model implements ContactShouldReceiveFields
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+    public function isStaff(): bool
+    {
+        return $this->role === 'staff';
     }
 }
