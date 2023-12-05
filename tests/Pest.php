@@ -49,43 +49,19 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function validateContactPostData($data, $status, $expectedJsonStructure, $validationErrors): Closure
+function apiTest($method, $route, $data, $status, $expectedJsonStructure, $validationErrors): Closure
 {
-    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
-        $this->postJson(route('contacts.store'), $data)
-            ->assertStatus($status)
-            ->assertJsonStructure($expectedJsonStructure)
-            ->assertJsonValidationErrors($validationErrors);
-    };
-}
+    return function () use ($method, $route, $data, $status, $expectedJsonStructure, $validationErrors) {
+        $request = match ($method) {
+            'POST' => $this->postJson(route($route), $data),
+            'PUT' => $this->putJson(route($route, auth()->user()), $data),
+        };
 
-function validateContactPutData($data, $status, $expectedJsonStructure, $validationErrors): Closure
-{
-    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
-        $this->putJson(route('contacts.update', 1), $data)
-            ->assertStatus($status)
-            ->assertJsonStructure($expectedJsonStructure)
-            ->assertJsonValidationErrors($validationErrors);
-    };
-}
-
-function validateUserPostData($userData, $status, $expectedJsonStructure, $validationErrors): Closure
-{
-    return function () use ($userData, $status, $expectedJsonStructure, $validationErrors) {
-        $this->postJson(route('users.store'), $userData)
-            ->assertStatus($status)
-            ->assertJsonStructure($expectedJsonStructure)
-            ->assertJsonValidationErrors($validationErrors);
-    };
-}
-
-function validateUserPutData($data, $status, $expectedJsonStructure, $validationErrors): Closure
-{
-    return function () use ($data, $status, $expectedJsonStructure, $validationErrors) {
-        $this->putJson(route('users.update', 1), $data)
-            ->assertStatus($status)
-            ->assertJsonStructure($expectedJsonStructure)
-            ->assertJsonValidationErrors($validationErrors);
+        if ($request) {
+            $request->assertStatus($status)
+                ->assertJsonStructure($expectedJsonStructure)
+                ->assertJsonValidationErrors($validationErrors);
+        }
     };
 }
 

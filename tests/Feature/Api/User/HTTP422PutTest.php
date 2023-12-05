@@ -17,7 +17,9 @@ describe('422 > PUT', function () {
      * NAME TESTS
      */
     $updatedUserData['name'] = '';
-    test('validation error no name', validateUserPutData(
+    test('validation error no name', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['name']],
@@ -25,7 +27,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['name'] = [];
-    test('validation error invalid name array', validateUserPutData(
+    test('validation error invalid name array', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['name']],
@@ -33,7 +37,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['name'] = false;
-    test('validation error invalid name false', validateUserPutData(
+    test('validation error invalid name false', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['name']],
@@ -41,7 +47,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['name'] = true;
-    test('validation error invalid name true', validateUserPutData(
+    test('validation error invalid name true', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['name']],
@@ -54,7 +62,9 @@ describe('422 > PUT', function () {
      * EMAIL TESTS
      */
     $updatedUserData['email'] = 'admin.example.com';
-    test('validation error wrong email format', validateUserPutData(
+    test('validation error wrong email format', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -62,7 +72,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['email'] = [];
-    test('validation error email array', validateUserPutData(
+    test('validation error email array', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -70,7 +82,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['email'] = 1;
-    test('validation error email integer', validateUserPutData(
+    test('validation error email integer', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -78,7 +92,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['email'] = false;
-    test('validation error email false', validateUserPutData(
+    test('validation error email false', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -86,7 +102,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['email'] = true;
-    test('validation error email true', validateUserPutData(
+    test('validation error email true', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -94,7 +112,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['email'] = '@a';
-    test('validation error email too short', validateUserPutData(
+    test('validation error email too short', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -102,7 +122,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['email'] = 'loremipsumdolorsitametconsecteturadipiscingelitseddoetaliqualaborum@exampleemail.com';
-    test('validation error email too long', validateUserPutData(
+    test('validation error email too long', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['email']],
@@ -115,7 +137,9 @@ describe('422 > PUT', function () {
      * PASSWORD TESTS
      */
     $updatedUserData['password'] = '';
-    test('validation error no password', validateUserPutData(
+    test('validation error no password', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -123,7 +147,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['password'] = [];
-    test('validation error password array', validateUserPutData(
+    test('validation error password array', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -131,7 +157,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['password'] = 1;
-    test('validation error password integer', validateUserPutData(
+    test('validation error password integer', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -139,7 +167,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['password'] = false;
-    test('validation error password false', validateUserPutData(
+    test('validation error password false', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -147,7 +177,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['password'] = true;
-    test('validation error password true', validateUserPutData(
+    test('validation error password true', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -155,7 +187,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['password'] = 'L';
-    test('validation error password too short', validateUserPutData(
+    test('validation error password too short', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -163,7 +197,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['password'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
-    test('validation error password too long', validateUserPutData(
+    test('validation error password too long', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['password']],
@@ -176,7 +212,9 @@ describe('422 > PUT', function () {
      * ROLE TESTS
      */
     $updatedUserData['role'] = [];
-    test('validation error role array', validateUserPutData(
+    test('validation error role array', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['role']],
@@ -184,7 +222,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['role'] = 1;
-    test('validation error role integer', validateUserPutData(
+    test('validation error role integer', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['role']],
@@ -195,7 +235,9 @@ describe('422 > PUT', function () {
     ));
 
     $updatedUserData['role'] = 'invalid';
-    test('validation error role invalid', validateUserPutData(
+    test('validation error role invalid', apiTest(
+        'PUT',
+        'users.update',
         $updatedUserData,
         422,
         ['errors' => ['role']],

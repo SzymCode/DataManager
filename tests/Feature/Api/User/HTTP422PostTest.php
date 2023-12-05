@@ -16,7 +16,9 @@ describe('422 > POST', function() {
      * NAME TESTS
      */
     $userData['name'] = '';
-    test('validation error no name', validateUserPostData(
+    test('validation error no name', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['name']],
@@ -24,7 +26,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['name'] = [];
-    test('validation error invalid name array', validateUserPostData(
+    test('validation error invalid name array', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['name']],
@@ -32,7 +36,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['name'] = false;
-    test('validation error invalid name false', validateUserPostData(
+    test('validation error invalid name false', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['name']],
@@ -40,7 +46,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['name'] = true;
-    test('validation error invalid name true', validateUserPostData(
+    test('validation error invalid name true', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['name']],
@@ -54,7 +62,9 @@ describe('422 > POST', function() {
      * EMAIL TESTS
      */
     $userData['email'] = 'admin.example.com';
-    test('validation error wrong email format', validateUserPostData(
+    test('validation error wrong email format', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -62,7 +72,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['email'] = [];
-    test('validation error email array', validateUserPostData(
+    test('validation error email array', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -70,7 +82,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['email'] = 1;
-    test('validation error email integer', validateUserPostData(
+    test('validation error email integer', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -78,7 +92,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['email'] = false;
-    test('validation error email false', validateUserPostData(
+    test('validation error email false', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -86,7 +102,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['email'] = true;
-    test('validation error email true', validateUserPostData(
+    test('validation error email true', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -94,7 +112,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['email'] = '@a';
-    test('validation error email too short', validateUserPostData(
+    test('validation error email too short', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -102,7 +122,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['email'] = 'loremipsumdolorsitametconsecteturadipiscingelitseddoetaliqualaborum@exampleemail.com';
-    test('validation error email too long', validateUserPostData(
+    test('validation error email too long', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['email']],
@@ -116,7 +138,9 @@ describe('422 > POST', function() {
      * PASSWORD TESTS
      */
     $userData['password'] = '';
-    test('validation error no password', validateUserPostData(
+    test('validation error no password', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -124,7 +148,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['password'] = [];
-    test('validation error password array', validateUserPostData(
+    test('validation error password array', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -132,7 +158,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['password'] = 1;
-    test('validation error password integer', validateUserPostData(
+    test('validation error password integer', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -140,7 +168,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['password'] = false;
-    test('validation error password false', validateUserPostData(
+    test('validation error password false', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -148,7 +178,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['password'] = true;
-    test('validation error password true', validateUserPostData(
+    test('validation error password true', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -156,7 +188,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['password'] = 'L';
-    test('validation error password too short', validateUserPostData(
+    test('validation error password too short', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -164,7 +198,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['password'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
-    test('validation error password too long', validateUserPostData(
+    test('validation error password too long', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['password']],
@@ -178,7 +214,9 @@ describe('422 > POST', function() {
      * ROLE TESTS
      */
     $userData['role'] = [];
-    test('validation error role array', validateUserPostData(
+    test('validation error role array', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['role']],
@@ -186,7 +224,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['role'] = 1;
-    test('validation error role integer', validateUserPostData(
+    test('validation error role integer', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['role']],
@@ -197,7 +237,9 @@ describe('422 > POST', function() {
     ));
 
     $userData['role'] = 'invalid';
-    test('validation error role invalid', validateUserPostData(
+    test('validation error role invalid', apiTest(
+        'POST',
+        'users.store',
         $userData,
         422,
         ['errors' => ['role']],
