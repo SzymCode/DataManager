@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Contracts\ContactShouldReceiveFields;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
 /**
@@ -22,10 +22,15 @@ use Illuminate\Notifications\Notifiable;
  * @property string role
  */
 
-class Contact extends Authenticatable
+class Contact extends Model implements ContactShouldReceiveFields
 {
     use HasFactory, Notifiable;
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string, string, string, string, string, string, DateTime, array, string>
+     */
     protected $fillable = [
         'user_id',
         'first_name',
@@ -39,15 +44,10 @@ class Contact extends Authenticatable
         'role'
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
 
     // AUTH METHODS
     public function isAdmin(): bool

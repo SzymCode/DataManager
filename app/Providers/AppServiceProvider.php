@@ -11,9 +11,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-    }
+        $serviceNamespace = 'App\\Services\\';
+        $servicePath = __DIR__.'/../Services/';
+        $dirHandle = opendir($servicePath);
 
+        while (($file = readdir($dirHandle)) !== false) {
+            if (is_file($servicePath . $file) && pathinfo($file, PATHINFO_EXTENSION) === 'php') {
+                $serviceClass = str_replace('.php', '', $file);
+                $this->app->singleton($serviceNamespace . $serviceClass, $serviceNamespace . $serviceClass);
+            }
+        }
+
+        closedir($dirHandle);
+    }
     /**
      * Bootstrap any application services.
      */

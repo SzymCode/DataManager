@@ -9,7 +9,7 @@ class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
-    public function definition(): array
+    public function definition()
     {
         return [
             'first_name' => $this->faker->firstName,
