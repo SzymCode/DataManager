@@ -9,9 +9,10 @@ class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
+            'user_id' => $this->faker->numberBetween(0, 1000),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,

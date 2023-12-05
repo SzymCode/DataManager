@@ -14,7 +14,8 @@
 uses(
     Tests\TestCase::class,
     // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+)->in('Feature', 'Unit', 'Global');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -46,3 +47,58 @@ function something()
 {
     // ..
 }
+
+
+// TEST GROUPS
+
+uses()
+    ->group('feature')
+    ->in('Feature');
+
+uses()
+    ->group('contactapi')
+    ->in('Feature/Api/Contact');
+
+uses()
+    ->group('userapi')
+    ->in('Feature/Api/User');
+
+uses()
+    ->group('database')
+    ->in('Feature/Database');
+
+uses()
+    ->group('factories')
+    ->in('Feature/Database/Factories');
+
+uses()
+    ->group('migrations')
+    ->in('Feature/Database/Migrations');
+
+uses()
+    ->group('database-sanctum')
+    ->in('Feature/Database/Sanctum');
+
+uses()
+    ->group('seeders')
+    ->in('Feature/Database/Seeders');
+
+uses()
+    ->group('sanctum')
+    ->in('Feature/Sanctum');
+
+uses()
+    ->group('global')
+    ->in('Global');
+
+uses()
+    ->group('unit')
+    ->in('Unit');
+
+uses()
+    ->group('controllers')
+    ->in('Unit/Controllers');
+
+uses()
+    ->group('models')
+    ->in('Unit/Models');

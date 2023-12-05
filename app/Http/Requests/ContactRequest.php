@@ -15,15 +15,15 @@ class ContactRequest extends FormRequest
     {
         return [
             'user_id' => 'required|integer',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'personal_phone' => 'nullable|string|max:20',
-            'work_phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:500',
+            'first_name' => 'required|string|min:3|max:30',
+            'last_name' => 'nullable|string|min:3|max:30',
+            'email' => 'nullable|email|max:70',
+            'personal_phone' => 'nullable|string|min:9|max:9|regex:/^\d{9}/',
+            'work_phone' => 'nullable|string|min:9|max:9|regex:/^\d{9}/',
+            'address' => 'nullable|string|min:15|max:100',
             'birthday' => 'nullable|date',
-            'contact_groups' => 'nullable|array',
-            'role' => 'required|string|in:user,admin,staff'
+            'contact_groups' => 'nullable|json',
+            'role' => 'nullable|string|in:user,admin,staff'
         ];
     }
 }
