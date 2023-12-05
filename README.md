@@ -63,7 +63,7 @@ php artisan serve
 
 
 
-<details><summary> <h2>  ❓ Factories & Tests  </summary>
+<details><summary> <h2>  ❓ Usage  </summary>
 
 - Run factories to generate fake data:
 ```bash
@@ -77,6 +77,10 @@ Contact::factory()->count(100)->create();
 ./vendor/bin/pest 
 ```
 
+- Run prettier:
+```
+npm run write
+```
 <br/>
 
 </details>
