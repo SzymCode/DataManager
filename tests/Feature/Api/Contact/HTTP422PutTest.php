@@ -1,17 +1,12 @@
 <?php
 
-use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 
-beforeEach(function() {
-    Sanctum::actingAs(
-        User::factory()->create(),
-        ['contacts-update']
-    );
+beforeEach(function () {
+    $this->createUsers();
+    $this->actingAs($this->admin);
 });
 
-
-describe('422 > PUT', function() {
+describe('422 > PUT', function($updatedData = updatedData) {
     /**
      * USER ID TESTS
      */
@@ -19,42 +14,50 @@ describe('422 > PUT', function() {
     test('validation error no user_id', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['user_id']],
-        ['user_id' => 'The user id field is required.']
+        ['errors' => [
+            'user_id' => ['The user id field is required.']
+        ]]
     ));
 
     $updatedData['user_id'] = [];
     test('validation error invalid user_id array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['user_id']],
-        ['user_id' => 'The user id field is required.']
+        ['errors' => [
+            'user_id' => ['The user id field is required.']
+        ]]
     ));
 
     $updatedData['user_id'] = 'user_id';
     test('validation error invalid user_id string', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['user_id']],
-        ['user_id' => 'The user id field must be an integer.']
+        ['errors' => [
+            'user_id' => ['The user id field must be an integer.']
+        ]]
     ));
 
     $updatedData['user_id'] = false;
     test('validation error invalid user_id false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['user_id']],
-        ['user_id' => 'The user id field must be an integer.']
+        ['errors' => [
+            'user_id' => ['The user id field must be an integer.']
+        ]]
     ));
-    $data['user_id'] = updatedData['user_id']; // reset user_id value
+    $updatedData['user_id'] = updatedData['user_id']; // reset user_id value
 
 
     /**
@@ -64,70 +67,93 @@ describe('422 > PUT', function() {
     test('validation error no first_name', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field is required.']
+        ['errors' => [
+            'first_name' => ['The first name field is required.']
+        ]]
     ));
 
     $updatedData['first_name'] = [];
     test('validation error first_name array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field is required.']
+        ['errors' => [
+            'first_name' => ['The first name field is required.']
+        ]]
     ));
 
     $updatedData['first_name'] = 1;
     test('validation error first_name integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field must be a string.']
+        ['errors' => [
+            'first_name' => [
+                'The first name field must be a string.',
+                'The first name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['first_name'] = false;
     test('validation error first_name false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field must be a string.']
+        ['errors' => [
+            'first_name' => [
+                'The first name field must be a string.',
+                'The first name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['first_name'] = true;
     test('validation error first_name true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field must be a string.']
+        ['errors' => [
+            'first_name' => [
+                'The first name field must be a string.',
+                'The first name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['first_name'] = 'L';
     test('validation error first_name too short', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field must be at least 3 characters.']
+        ['errors' => [
+            'first_name' => ['The first name field must be at least 3 characters.']
+        ]]
     ));
 
     $updatedData['first_name'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
     test('validation error first_name too long', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['first_name']],
-        ['first_name' => 'The first name field must not be greater than 30 characters.']
+        ['errors' => [
+            'first_name' => ['The first name field must not be greater than 30 characters.']
+        ]]
     ));
     $updatedData['first_name'] = updatedData['first_name']; // reset first_name value
 
@@ -139,60 +165,84 @@ describe('422 > PUT', function() {
     test('validation error last_name array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['last_name']],
-        ['last_name' => 'The last name field must be at least 3 characters.']
+        ['errors' => [
+            'last_name' => [
+                'The last name field must be a string.',
+                'The last name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['last_name'] = 1;
     test('validation error last_name integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['last_name']],
-        ['last_name' => 'The last name field must be a string.']
+        ['errors' => [
+            'last_name' => [
+                'The last name field must be a string.',
+                'The last name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['last_name'] = false;
     test('validation error last_name false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['last_name']],
-        ['last_name' => 'The last name field must be a string.']
+        ['errors' => [
+            'last_name' => [
+                'The last name field must be a string.',
+                'The last name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['last_name'] = true;
     test('validation error last_name true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['last_name']],
-        ['last_name' => 'The last name field must be a string.']
+        ['errors' => [
+            'last_name' => [
+                'The last name field must be a string.',
+                'The last name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['last_name'] = 'L';
     test('validation error last_name too short', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['last_name']],
-        ['last_name' => 'The last name field must be at least 3 characters.']
+        ['errors' => [
+            'last_name' => ['The last name field must be at least 3 characters.']
+        ]]
     ));
 
     $updatedData['last_name'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
     test('validation error last_name too long', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['last_name']],
-        ['last_name' => 'The last name field must not be greater than 30 characters.']
+        ['errors' => [
+            'last_name' => ['The last name field must not be greater than 30 characters.']
+        ]]
     ));
     $updatedData['last_name'] = updatedData['last_name']; // reset last_name value
 
@@ -205,50 +255,72 @@ describe('422 > PUT', function() {
     test('validation error wrong email format', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => ['The email field must be a valid email address.']
+        ]]
     ));
 
     $updatedData['email'] = [];
     test('validation error email array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['email'] = 1;
     test('validation error email integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['email'] = false;
     test('validation error email false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['email'] = true;
     test('validation error email true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
     $updatedData['email'] = updatedData['email']; // reset email value
 
@@ -261,13 +333,15 @@ describe('422 > PUT', function() {
     test('validation error personal_phone array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['personal_phone']],
-        ['personal_phone' => [
-            "The personal phone field must be a string.",
-            "The personal phone field must be at least 9 characters.",
-            "The personal phone field format is invalid."
+        ['errors' => [
+            'personal_phone' => [
+                'The personal phone field must be a string.',
+                'The personal phone field must be at least 9 characters.',
+                'The personal phone field format is invalid.'
+            ]
         ]]
     ));
 
@@ -275,12 +349,15 @@ describe('422 > PUT', function() {
     test('validation error personal_phone false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['personal_phone']],
-        ['personal_phone' => [
-            'The personal phone field must be a string.',
-            'The personal phone field must be at least 9 characters.'
+        ['errors' => [
+            'personal_phone' => [
+                'The personal phone field must be a string.',
+                'The personal phone field must be at least 9 characters.',
+                'The personal phone field format is invalid.'
+            ]
         ]]
     ));
 
@@ -288,12 +365,15 @@ describe('422 > PUT', function() {
     test('validation error personal_phone true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['personal_phone']],
-        ['personal_phone' => [
-            'The personal phone field must be a string.',
-            'The personal phone field must be at least 9 characters.'
+        ['errors' => [
+            'personal_phone' => [
+                'The personal phone field must be a string.',
+                'The personal phone field must be at least 9 characters.',
+                'The personal phone field format is invalid.'
+            ]
         ]]
     ));
 
@@ -301,22 +381,29 @@ describe('422 > PUT', function() {
     test('validation error personal_phone too short', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['personal_phone']],
-        ['personal_phone' => 'The personal phone field must be at least 9 characters.']
+        ['errors' => [
+            'personal_phone' => [
+                'The personal phone field must be at least 9 characters.',
+                'The personal phone field format is invalid.'
+            ]
+        ]]
     ));
 
     $updatedData['personal_phone'] = '98 76 543 210 123';
     test('validation error personal_phone too long', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['personal_phone']],
-        ['personal_phone' => [
-            'The personal phone field must not be greater than 9 characters.',
-            'The personal phone field format is invalid.'
+        ['errors' => [
+            'personal_phone' => [
+                'The personal phone field must not be greater than 9 characters.',
+                'The personal phone field format is invalid.'
+            ]
         ]]
     ));
     $updatedData['personal_phone'] = updatedData['personal_phone']; // reset personal_phone value
@@ -330,13 +417,15 @@ describe('422 > PUT', function() {
     test('validation error work_phone array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['work_phone']],
-        ['work_phone' => [
-            "The work phone field must be a string.",
-            "The work phone field must be at least 9 characters.",
-            "The work phone field format is invalid."
+        ['errors' => [
+            'work_phone' => [
+                'The work phone field must be a string.',
+                'The work phone field must be at least 9 characters.',
+                'The work phone field format is invalid.'
+            ]
         ]]
     ));
 
@@ -344,12 +433,15 @@ describe('422 > PUT', function() {
     test('validation error work_phone false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['work_phone']],
-        ['work_phone' => [
-            'The work phone field must be a string.',
-            'The work phone field must be at least 9 characters.'
+        ['errors' => [
+            'work_phone' => [
+                'The work phone field must be a string.',
+                'The work phone field must be at least 9 characters.',
+                'The work phone field format is invalid.'
+            ]
         ]]
     ));
 
@@ -357,12 +449,15 @@ describe('422 > PUT', function() {
     test('validation error work_phone true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['work_phone']],
-        ['work_phone' => [
-            'The work phone field must be a string.',
-            'The work phone field must be at least 9 characters.'
+        ['errors' => [
+            'work_phone' => [
+                'The work phone field must be a string.',
+                'The work phone field must be at least 9 characters.',
+                'The work phone field format is invalid.'
+            ]
         ]]
     ));
 
@@ -370,11 +465,14 @@ describe('422 > PUT', function() {
     test('validation error work_phone too short', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['work_phone']],
-        ['work_phone' => [
-            'The work phone field must be at least 9 characters.'
+        ['errors' => [
+            'work_phone' => [
+                'The work phone field format is invalid.',
+                'The work phone field must be at least 9 characters.'
+            ]
         ]]
     ));
 
@@ -382,12 +480,14 @@ describe('422 > PUT', function() {
     test('validation error work_phone too long', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['work_phone']],
-        ['work_phone' => [
-            'The work phone field must not be greater than 9 characters.',
-            'The work phone field format is invalid.'
+        ['errors' => [
+            'work_phone' => [
+                'The work phone field format is invalid.',
+                'The work phone field must not be greater than 9 characters.'
+            ]
         ]]
     ));
     $updatedData['work_phone'] = updatedData['work_phone']; // reset work_phone value
@@ -401,60 +501,84 @@ describe('422 > PUT', function() {
     test('validation error address array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['address']],
-        ['address' => 'The address field must be a string.']
+        ['errors' => [
+            'address' => [
+                'The address field must be a string.',
+                'The address field must be at least 15 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['address'] = 1;
     test('validation error address integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['address']],
-        ['address' => 'The address field must be a string.']
+        ['errors' => [
+            'address' => [
+                'The address field must be a string.',
+                'The address field must be at least 15 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['address'] = false;
     test('validation error address false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['address']],
-        ['address' => 'The address field must be a string.']
+        ['errors' => [
+            'address' => [
+                'The address field must be a string.',
+                'The address field must be at least 15 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['address'] = true;
     test('validation error address true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['address']],
-        ['address' => 'The address field must be a string.']
+        ['errors' => [
+            'address' => [
+                'The address field must be a string.',
+                'The address field must be at least 15 characters.'
+            ]
+        ]]
     ));
 
     $updatedData['address'] = 'Lorem ipsum.';
     test('validation error address too short', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['address']],
-        ['address' => 'The address field must be at least 15 characters.']
+        ['errors' => [
+            'address' => ['The address field must be at least 15 characters.']
+        ]]
     ));
 
     $updatedData['address'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua';
     test('validation error address too long', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['address']],
-        ['address' => 'The address field must not be greater than 100 characters.']
+        ['errors' => [
+            'address' => ['The address field must not be greater than 100 characters.']
+        ]]
     ));
     $updatedData['address'] = updatedData['address']; // reset address value
 
@@ -467,60 +591,72 @@ describe('422 > PUT', function() {
     test('validation error birthday array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['birthday']],
-        ['birthday' => 'The birthday field must be a valid date.']
+        ['errors' => [
+            'birthday' => ['The birthday field must be a valid date.']
+        ]]
     ));
 
     $updatedData['birthday'] = 'birthday';
     test('validation error birthday string', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['birthday']],
-        ['birthday' => 'The birthday field must be a valid date.']
+        ['errors' => [
+            'birthday' => ['The birthday field must be a valid date.']
+        ]]
     ));
 
     $updatedData['birthday'] = 1;
     test('validation error birthday integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['birthday']],
-        ['birthday' => 'The birthday field must be a valid date.']
+        ['errors' => [
+            'birthday' => ['The birthday field must be a valid date.']
+        ]]
     ));
 
     $updatedData['birthday'] = false;
     test('validation error birthday false', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['birthday']],
-        ['birthday' => 'The birthday field must be a valid date.']
+        ['errors' => [
+            'birthday' => ['The birthday field must be a valid date.']
+        ]]
     ));
 
     $updatedData['birthday'] = true;
     test('validation error birthday true', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['birthday']],
-        ['birthday' => 'The birthday field must be a valid date.']
+        ['errors' => [
+            'birthday' => ['The birthday field must be a valid date.']
+        ]]
     ));
 
     $updatedData['birthday'] = '30.30.2023';
     test('validation error birthday invalid date', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['birthday']],
-        ['birthday' => 'The birthday field must be a valid date.']
+        ['errors' => [
+            'birthday' => ['The birthday field must be a valid date.']
+        ]]
     ));
     $updatedData['birthday'] = updatedData['birthday']; // reset birthday value
 
@@ -533,30 +669,36 @@ describe('422 > PUT', function() {
     test('validation error contact groups array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['contact_groups']],
-        ['contact_groups' => 'The contact groups field must be a valid JSON string.']
+        ['errors' => [
+            'contact_groups' => ['The contact groups field must be a valid JSON string.']
+        ]]
     ));
 
     $updatedData['contact_groups'] = [1];
     test('validation error contact groups array integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['contact_groups']],
-        ['contact_groups' => 'The contact groups field must be a valid JSON string.']
+        ['errors' => [
+            'contact_groups' => ['The contact groups field must be a valid JSON string.']
+        ]]
     ));
 
     $updatedData['contact_groups'] = 'contact_groups';
     test('validation error contact groups string', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['contact_groups']],
-        ['contact_groups' => 'The contact groups field must be a valid JSON string.']
+        ['errors' => [
+            'contact_groups' => ['The contact groups field must be a valid JSON string.']
+        ]]
     ));
     $updatedData['contact_groups'] = updatedData['contact_groups']; // reset contact_groups value
 
@@ -569,12 +711,14 @@ describe('422 > PUT', function() {
     test('validation error role array', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['role']],
-        ['role' => [
-            "The role field must be a string.",
-            "The selected role is invalid."
+        ['errors' => [
+            'role' => [
+                'The role field must be a string.',
+                'The selected role is invalid.'
+            ]
         ]]
     ));
 
@@ -582,12 +726,14 @@ describe('422 > PUT', function() {
     test('validation error role integer', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['role']],
-        ['role' => [
-            "The role field must be a string.",
-            "The selected role is invalid."
+        ['errors' => [
+            'role' => [
+                'The role field must be a string.',
+                'The selected role is invalid.'
+            ]
         ]]
     ));
 
@@ -595,12 +741,11 @@ describe('422 > PUT', function() {
     test('validation error role invalid', apiTest(
         'PUT',
         'contacts.update',
-        $updatedData,
         422,
+        $updatedData,
         ['errors' => ['role']],
-        ['role' => [
-            "The role field must be a string.",
-            "The selected role is invalid."
+        ['errors' => [
+            'role' => ['The selected role is invalid.']
         ]]
     ));
 });

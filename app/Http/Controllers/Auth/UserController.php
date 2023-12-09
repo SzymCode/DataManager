@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Services\UserService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -14,6 +16,12 @@ class UserController extends Controller
     public function __construct(UserService $service)
     {
         $this->service = $service;
+        $this->middleware(function($request, $next) {
+            if(!Auth::user()->isAdmin()) {
+                throw new AuthorizationException('Unauthorized', 403);
+            }
+            return $next($request);
+        })->only('index', 'show', 'store', 'update', 'delete');
     }
 
     public function index(): JsonResponse

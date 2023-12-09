@@ -1,44 +1,66 @@
 <?php
 
-use App\Models\Contact;
-
 
 describe('401', function() {
-    test('unauthorized index api', function () {
-        $this->getJson(route('contacts.index'))
-            ->assertStatus(401);
-    });
-    test('unauthorized show api', function () {
-        $contact = Contact::factory()->create();
+    test('unauthorized index api', apiTest(
+        'GET',
+        'contacts.index',
+        401,
+        null,
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
+    test('unauthorized show api', apiTest(
+        'SHOW',
+        'contacts.show',
+        401,
+        1,
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
 
-        $this->getJson(route('contacts.show',  $contact->id))
-            ->assertStatus(401);
-    });
-    test('unauthorized store api with data', function () {
-        $this->postJson(route('contacts.store'), data)
-            ->assertStatus(401);
-    });
-    test('unauthorized store api empty json', function () {
-        $this->postJson(route('contacts.store'))
-            ->assertStatus(401);
-    });
-    test('unauthorized update api with data', function () {
-        $contact = Contact::factory()->create();
+    test('unauthorized store api with data', apiTest(
+        'POST',
+        'contacts.store',
+        401,
+        userData,
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
 
-        $this->putJson(route('contacts.update', $contact->id), data)
-            ->assertStatus(401);
-    });
-    test('unauthorized update api empty json', function () {
-        $contact = Contact::factory()->create();
+    test('unauthorized store api empty json', apiTest(
+        'POST',
+        'contacts.store',
+        401,
+        [],
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
 
-        $this->putJson(route('contacts.update', $contact->id))
-            ->assertStatus(401);
-    });
-    test('unauthorized destroy api', function () {
-        $contact = Contact::factory()->create();
+    test('unauthorized update api with data', apiTest(
+        'PUT',
+        'users.update',
+        401,
+        data,
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
 
-        $this->deleteJson(route('contacts.destroy', $contact->id))
-            ->assertStatus(401);
-        $this->assertDatabaseHas('contacts', ['id' => $contact->id]);
-    });
+    test('unauthorized update api empty json', apiTest(
+        'PUT',
+        'contacts.update',
+        401,
+        [],
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
+
+    test('unauthorized destroy api', apiTest(
+        'DELETE',
+        'contacts.destroy',
+        401,
+        null,
+        ['message'],
+        ['message' => 'Unauthenticated.']
+    ));
 });

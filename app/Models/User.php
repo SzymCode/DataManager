@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\UserShouldReceiveFields;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -18,7 +19,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $role
  */
 
-class User extends Authenticatable
+class User extends Authenticatable implements UserShouldReceiveFields
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -45,6 +46,20 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+    public function getRole(): string
+    {
+        return $this->role;
+    }
 
     // AUTH METHODS
 

@@ -21,7 +21,7 @@ class ContactService
 
     public function getContactById($id): array
     {
-        $model = $this->model::query()->findOrFail($id);
+        $model = $this->model::findOrFail($id);
 
         return fractal()
             ->item($model)
@@ -31,7 +31,7 @@ class ContactService
 
     public function createContact(array $data): array
     {
-        $model = $this->model::query()->create($data);
+        $model = $this->model::create($data);
 
         return fractal()
             ->item($model)
@@ -41,7 +41,7 @@ class ContactService
 
     public function updateContact($id, array $data): array
     {
-        $model = $this->model::query()->findOrFail($id);
+        $model = $this->model::findOrFail($id);
 
         $model->update($data);
 
@@ -53,7 +53,7 @@ class ContactService
 
     public function deleteContact($id): void
     {
-        $model = $this->model::query()->findOrFail($id);
+        $model = $this->model::findOrFail($id);
 
         $model->delete();
     }

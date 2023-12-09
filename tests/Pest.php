@@ -15,14 +15,21 @@ $data = require_once 'tests\TestConstants.php';
 $updatedData = require_once 'tests\TestConstants.php';
 $userData = require_once 'tests\TestConstants.php';
 $updatedUserData = require_once 'tests\TestConstants.php';
-$adminData = require_once 'tests\TestConstants.php';
 
-uses(Tests\TestCase::class)
+
+uses(Tests\TestCase::class,)
+    ->in('Feature', 'Unit', 'Global');
+
+uses(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->beforeEach(function () {
+        $this->artisan('db:seed');
+    })->in( 'Unit');
+
+uses()
     ->beforeEach(function () {
         $this->artisan('migrate:fresh');
     })
-    ->in('Feature', 'Unit', 'Global');
-
+    ->in(  'Feature', 'Global');
 
 /*
 |--------------------------------------------------------------------------
@@ -50,19 +57,22 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function apiTest($method, $route, $data, $status, $expectedJsonStructure, $validationErrors): Closure
+function apiTest($method, $route, $status, $data = null, $expectedJsonStructure = null, $expectedJsonFragment = null, $validationErrors = null): Closure
 {
-    return function () use ($method, $route, $data, $status, $expectedJsonStructure, $validationErrors) {
+    return function () use ($method, $route, $data, $status, $expectedJsonStructure, $expectedJsonFragment, $validationErrors) {
         $request = match ($method) {
+            'GET' => $this->getJson(route($route)),
+            'SHOW' => $this->getJson(route($route, $data)),
             'POST' => $this->postJson(route($route), $data),
-            'PUT' => $this->putJson(route($route, auth()->user()), $data),
+            'PUT' => $this->putJson(route($route, 1), $data),
+            'DELETE' => $this->deleteJson(route($route, 1)),
         };
 
-        if ($request) {
-            $request->assertStatus($status)
-                ->assertJsonStructure($expectedJsonStructure)
-                ->assertJsonValidationErrors($validationErrors);
-        }
+        $request->assertStatus($status);
+
+        $expectedJsonStructure && $request->assertJsonStructure($expectedJsonStructure);
+        $expectedJsonFragment && $request->assertJsonFragment($expectedJsonFragment);
+        $validationErrors && $request->assertJsonValidationErrors($validationErrors);
     };
 }
 

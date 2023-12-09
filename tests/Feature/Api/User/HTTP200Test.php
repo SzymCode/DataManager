@@ -1,48 +1,33 @@
 <?php
 
 use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 
+beforeEach(function () {
+    $this->createUsers();
+    $this->actingAs($this->admin);
+});
 
 describe('200', function () {
     test('authorized store api', function () {
-        $this->artisan('migrate:fresh');
-
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['users-store']
-        );
-
         $this->postJson(route('users.store'), userData)
             ->assertOk();
     });
 
     test('authorized index api', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['users-index']
-        );
+        User::factory(3)->create();
 
         $this->getJson(route('users.index'))
             ->assertOk();
     });
 
     test('authorized show api', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['users-show']
-        );
+        $user = User::factory()->create();
 
-        $this->getJson(route('users.show', 1))
+        $this->getJson(route('users.show', $user->id))
             ->assertOk();
     });
 
     test('authorized update api', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['users-update']
-        );
-
         $user = User::factory()->create();
 
         $this->putJson(route('users.update', $user->id), updatedUserData)
@@ -50,11 +35,6 @@ describe('200', function () {
     });
 
     test('authorized destroy api', function () {
-        Sanctum::actingAs(
-            User::factory()->create(),
-            ['users-destroy']
-        );
-
         $user = User::factory()->create();
 
         $this->deleteJson(route('users.destroy', $user->id))

@@ -3,41 +3,58 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Collection;
+use App\Transformers\UserTransformer;
 
 class UserService
 {
-    public function getAllUsers(): Collection
+    public function __construct(private readonly User $model){}
+
+    public function getAllUsers()
     {
-        return User::all();
+        $model = $this->model->all();
+
+        return fractal()
+            ->collection($model)
+            ->transformWith(new UserTransformer())
+            ->toArray()['data'];
     }
 
-    public function getUserById($id)
+    public function getUserById($id): array
     {
-        return User::find($id);
+        $model = $this->model::findOrFail($id);
+
+        return fractal()
+            ->item($model)
+            ->transformWith(new UserTransformer())
+            ->toArray()['data'];
     }
 
-    public function createUser(array $data)
+    public function createUser(array $data): array
     {
-        return User::create($data);
+        $model = $this->model::create($data);
+
+        return fractal()
+            ->item($model)
+            ->transformWith(new UserTransformer())
+            ->toArray()['data'];
     }
 
-    public function updateUser($id, array $data)
+    public function updateUser($id, array $data): array
     {
-        $user = User::find($id);
-        if (!$user) {
-            return null; // Or throw an exception or handle the case as needed
-        }
+        $model = $this->model::findOrFail($id);
 
-        $user->update($data);
-        return $user;
+        $model->update($data);
+
+        return fractal()
+            ->item($model->fresh())
+            ->transformWith(new UserTransformer())
+            ->toArray()['data'];
     }
 
-    public function deleteUser($id)
+    public function deleteUser($id): void
     {
-        $user = User::find($id);
-        if ($user) {
-            $user->delete();
-        }
+        $model = $this->model::findOrFail($id);
+
+        $model->delete();
     }
 }

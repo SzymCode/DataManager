@@ -1,17 +1,12 @@
 <?php
 
-use App\Models\User;
-use Laravel\Sanctum\Sanctum;
 
-beforeEach(function() {
-    Sanctum::actingAs(
-        User::factory()->create(),
-        ['users-store']
-    );
+beforeEach(function () {
+    $this->createUsers();
+    $this->actingAs($this->admin);
 });
 
-
-describe('422 > POST', function() {
+describe('422 > POST', function($userData = userData) {
     /**
      * NAME TESTS
      */
@@ -19,40 +14,54 @@ describe('422 > POST', function() {
     test('validation error no name', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['name']],
-        ['name' => 'The name field is required.']
+        ['errors' => [
+            'name' => ['The name field is required.']
+        ]]
     ));
 
     $userData['name'] = [];
     test('validation error invalid name array', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['name']],
-        ['name' => 'The name field is required.']
+        ['errors' => [
+            'name' => ['The name field is required.']
+        ]]
     ));
 
     $userData['name'] = false;
     test('validation error invalid name false', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['name']],
-        ['name' => 'The name field must be a string.']
+        ['errors' => [
+            'name' => [
+                'The name field must be a string.',
+                'The name field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $userData['name'] = true;
     test('validation error invalid name true', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['name']],
-        ['name' => 'The name field must be a string.']
+        ['errors' => [
+            'name' => [
+                'The name field must be a string.',
+                'The name field must be at least 3 characters.'
+            ]
+        ]]
     ));
     $userData['name'] = userData['name']; // reset name value
 
@@ -65,70 +74,96 @@ describe('422 > POST', function() {
     test('validation error wrong email format', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => ['The email field must be a valid email address.']
+        ]]
     ));
 
     $userData['email'] = [];
     test('validation error email array', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field is required.']
+        ['errors' => [
+            'email' => ['The email field is required.']
+        ]]
     ));
 
     $userData['email'] = 1;
     test('validation error email integer', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $userData['email'] = false;
     test('validation error email false', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $userData['email'] = true;
     test('validation error email true', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $userData['email'] = '@a';
     test('validation error email too short', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field must be a valid email address.']
+        ['errors' => [
+            'email' => [
+                'The email field must be a valid email address.',
+                'The email field must be at least 3 characters.'
+            ]
+        ]]
     ));
 
     $userData['email'] = 'loremipsumdolorsitametconsecteturadipiscingelitseddoetaliqualaborum@exampleemail.com';
     test('validation error email too long', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['email']],
-        ['email' => 'The email field must not be greater than 70 characters.']
+        ['errors' => [
+            'email' => ['The email field must not be greater than 70 characters.']
+        ]]
     ));
     $userData['email'] = userData['email']; // reset email value
 
@@ -141,70 +176,84 @@ describe('422 > POST', function() {
     test('validation error no password', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field is required.']
+        ['errors' => [
+            'password' => ['The password field is required.']
+        ]]
     ));
 
     $userData['password'] = [];
     test('validation error password array', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field is required.']
+        ['errors' => [
+            'password' => ['The password field is required.']
+        ]]
     ));
 
     $userData['password'] = 1;
     test('validation error password integer', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field must be at least 8 characters.']
+        ['errors' => [
+            'password' => ['The password field must be at least 8 characters.']
+        ]]
     ));
 
     $userData['password'] = false;
     test('validation error password false', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field must be at least 8 characters.']
+        ['errors' => [
+            'password' => ['The password field must be at least 8 characters.']
+        ]]
     ));
 
     $userData['password'] = true;
     test('validation error password true', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field must be at least 8 characters.']
+        ['errors' => [
+            'password' => ['The password field must be at least 8 characters.']
+        ]]
     ));
 
     $userData['password'] = 'L';
     test('validation error password too short', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field must be at least 8 characters.']
+        ['errors' => [
+            'password' => ['The password field must be at least 8 characters.']
+        ]]
     ));
 
     $userData['password'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do et aliqua laborum.';
     test('validation error password too long', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['password']],
-        ['password' => 'The password field must not be greater than 50 characters.']
+        ['errors' => [
+            'password' => ['The password field must not be greater than 50 characters.']
+        ]]
     ));
     $userData['password'] = userData['password']; // reset password value
 
@@ -217,22 +266,23 @@ describe('422 > POST', function() {
     test('validation error role array', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['role']],
-        ['role' => 'The role field is required.']
+        ['errors' => [
+            'role' => ['The role field is required.']
+        ]]
     ));
 
     $userData['role'] = 1;
     test('validation error role integer', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['role']],
-        ['role' => [
-            "The role field must be a string.",
-            "The selected role is invalid."
+        ['errors' => [
+            'role' => ['The selected role is invalid.']
         ]]
     ));
 
@@ -240,12 +290,11 @@ describe('422 > POST', function() {
     test('validation error role invalid', apiTest(
         'POST',
         'users.store',
-        $userData,
         422,
+        $userData,
         ['errors' => ['role']],
-        ['role' => [
-            "The role field must be a string.",
-            "The selected role is invalid."
+        ['errors' => [
+            'role' => ['The selected role is invalid.']
         ]]
     ));
 });

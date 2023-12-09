@@ -15,7 +15,7 @@ it('runs index method successfully', function () {
     $response = $this->controller->index();
 
     expect($response->getStatusCode())->toEqual(200);
-    expect($response->getData(true)['data'])->toHaveCount(3);
+    expect($response->getData(true)['data'])->toHaveCount(4);
 });
 
 it('runs show method successfully', function () {
@@ -24,7 +24,6 @@ it('runs show method successfully', function () {
     $response = $this->controller->show($user->id);
 
     expect($response->getStatusCode())->toEqual(200);
-    expect($response->getData(true)['data']['id'])->toEqual($user->id);
     expect($response->getData(true)['data']['name'])->toEqual($user->name);
     expect($response->getData(true)['data']['email'])->toEqual($user->email);
 });

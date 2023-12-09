@@ -19,41 +19,31 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    })->middleware('abilities:user');
+    });
 
     Route::prefix('users')->controller(UserController::class)->group(function () {
         Route::get('/', 'index')
-            ->name('users.index')
-            ->middleware('abilities:users-index');
+            ->name('users.index');
         Route::get('/{id}', 'show')
-            ->name('users.show')
-            ->middleware('abilities:users-show');
+            ->name('users.show');
         Route::post('/', 'store')
-            ->name('users.store')
-            ->middleware('abilities:users-store');
+            ->name('users.store');
         Route::put('/{id}', 'update')
-            ->name('users.update')
-            ->middleware('abilities:users-update');
+            ->name('users.update');
         Route::delete('/{id}', 'destroy')
-            ->name('users.destroy')
-            ->middleware('abilities:users-destroy');
+            ->name('users.destroy');
     });
 
     Route::prefix('contacts')->controller(ContactController::class)->group(function () {
         Route::get('/', 'index')
-            ->name('contacts.index')
-            ->middleware('abilities:contacts-index');
+            ->name('contacts.index');
         Route::get('/{id}', 'show')
-            ->name('contacts.show')
-            ->middleware('abilities:contacts-show');
+            ->name('contacts.show');
         Route::post('/', 'store')
-            ->name('contacts.store')
-            ->middleware('abilities:contacts-store');
+            ->name('contacts.store');
         Route::put('/{id}', 'update')
-            ->name('contacts.update')
-            ->middleware('abilities:contacts-update');
+            ->name('contacts.update');
         Route::delete('/{id}', 'destroy')
-            ->name('contacts.destroy')
-            ->middleware('abilities:contacts-destroy');
+            ->name('contacts.destroy');
     });
 });
