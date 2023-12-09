@@ -9,7 +9,7 @@ const data = [
     'work_phone' => '123456789',
     'address' => '123 Main St, City',
     'birthday' => '2023-11-25',
-    'contact_groups' => '',
+    'contact_groups' => null,
     'role' => 'user'
 ];
 
@@ -22,7 +22,7 @@ const updatedData = [
     'work_phone' => '123456789',
     'address' => '123 Update St, City',
     'birthday' => '2023-11-26',
-    'contact_groups' => '',
+    'contact_groups' => null,
     'role' => 'admin'
 ];
 

@@ -62,7 +62,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Contact::class);
     }
-    private function createContactFromUserDetails(): void
+    public function createContactFromUserDetails(): void
     {
         $userId = $this->getAttribute('id');
         $userName = $this->getAttribute('name');

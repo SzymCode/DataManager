@@ -34,7 +34,9 @@ describe('200', function () {
             ['contacts-show']
         );
 
-        $this->getJson(route('contacts.show', 1))
+        $contact = Contact::factory()->create();
+
+        $this->getJson(route('contacts.show', $contact->id))
             ->assertOk();
     });
 

@@ -17,10 +17,11 @@ $userData = require_once 'tests\TestConstants.php';
 $updatedUserData = require_once 'tests\TestConstants.php';
 $adminData = require_once 'tests\TestConstants.php';
 
-uses(
-    Tests\TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature', 'Unit', 'Global');
+uses(Tests\TestCase::class)
+    ->beforeEach(function () {
+        $this->artisan('migrate:fresh');
+    })
+    ->in('Feature', 'Unit', 'Global');
 
 
 /*
