@@ -1,9 +1,10 @@
 <template>
-    <Button label="Create contact" @click="visible = true" />
-
     <Dialog v-model:visible="visible" modal class="w-30rem">
         <template #header>
-            <h2 class="m-0">Create new contact</h2>
+            <h2 class="m-0">
+                Edit contact: {{ contact.data.first_name }}
+                {{ contact.data.last_name }}
+            </h2>
         </template>
 
         <InlineMessage v-if="errors.length > 0" severity="warn">
@@ -83,28 +84,35 @@
                 />
             </div>
         </form>
+
         <template #footer>
-            <div class="flex gap-2 justify-content-end">
+            <div class="flex gap-2 justify-content-end mt-1">
                 <Button
                     severity="secondary"
                     label="Cancel"
-                    @click="visible = false"
+                    @click="toggleVisibilityEdit"
                 />
-                <Button
-                    label="Create"
-                    @click.prevent="storeContact"
-                    autofocus
-                />
+                <Button label="Create" @click.prevent="editContact" autofocus />
             </div>
         </template>
     </Dialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Ref, ref, toRefs, watch } from 'vue'
 import axios from 'axios'
 
+const props = defineProps<{
+    visible: boolean
+    toggle: (selectedUser: Ref<any>) => void
+    contact: any
+    options: any
+}>()
+
+const { contact, visible, options } = toRefs(props)
+
 const data = ref({
+    id: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -117,15 +125,16 @@ const data = ref({
     password: '',
     confirm_password: '',
 })
-
-const visible = ref(false)
 const errors = ref<string[]>([])
-const options = ref(['user', 'admin'])
 
-function storeContact(): void {
+function toggleVisibilityEdit() {
+    props.toggle(contact.value)
+}
+
+function editContact() {
     errors.value = []
     axios
-        .post('/api/contacts', {
+        .put('/api/contacts/' + data.value.id, {
             first_name: data.value.first_name,
             last_name: data.value.last_name,
             email: data.value.email,
@@ -136,13 +145,16 @@ function storeContact(): void {
             contact_groups: data.value.contact_groups,
             role: data.value.role,
         })
-        .then((response) => console.log(response))
+        .then((response) => {
+            toggleVisibilityEdit()
+            console.log(response)
+        })
         .catch((error) => {
             flashErrors(error.response.data.errors)
         })
 }
 
-function flashErrors(errorsData: Record<string, string[]>): void {
+function flashErrors(errorsData: Record<string, string[]>) {
     for (const value in errorsData) {
         if (Object.prototype.hasOwnProperty.call(errorsData, value)) {
             errors.value.push(...errorsData[value])
@@ -152,4 +164,8 @@ function flashErrors(errorsData: Record<string, string[]>): void {
         errors.value = []
     }, 5000)
 }
+
+watch(visible, () => {
+    Object.assign(data.value, contact.value.data)
+})
 </script>
