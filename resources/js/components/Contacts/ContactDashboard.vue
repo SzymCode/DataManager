@@ -1,11 +1,11 @@
 <template>
-    <Card class="myCard w-full mt-7 lg:mt-1 lg:ml-2 lg:mr-5">
+    <Card class="myCard contactDashboard w-full mt-7 lg:mt-1 lg:ml-2 lg:mr-5 mt-1">
         <template #title>
             <div class="flex justify-content-between">
-                <h3>Manage Users</h3>
+                <h3>Manage Contacts</h3>
 
                 <Button
-                    label="New User"
+                    label="New Contact"
                     @click="openModal('create')"
                     class="text-sm smallHeightButton"
                 />
@@ -14,9 +14,9 @@
         <template #content="rowData">
             <DataTable
                 v-bind:value="results"
-                v-bind:size="'small'"
                 v-bind:rows="10"
                 v-bind:row-hover="true"
+                v-bind:size="'small'"
                 v-if="results"
                 paginator
                 stripedRows
@@ -31,22 +31,22 @@
                     class="idColumn"
                 />
                 <Column
-                    field="name"
+                    field="full_name"
                     :sortable="true"
-                    header="Name"
-                    class="nameColumn"
+                    header="Full name"
+                    class="fullNameColumn"
                 />
                 <Column
                     field="email"
                     :sortable="true"
                     header="Email"
-                    class="emailColumn"
+                    class="emailColumn tabletColumn"
                 />
                 <Column
-                    field="role"
+                    field="birthday"
                     :sortable="true"
-                    header="Role"
-                    class="roleColumn"
+                    header="Birthday"
+                    class="birthdayColumn desktopColumn"
                 />
                 <Column
                     field="created_at"
@@ -83,12 +83,7 @@
                                 icon="pi pi-bars"
                                 @click="openMenu($event, rowData)"
                             />
-                            <Menu
-                                ref="menu"
-                                :model="items"
-                                :popup="true"
-                                class="w-10rem"
-                            />
+                            <Menu ref="menu" :model="items" :popup="true" />
                         </div>
                     </template>
                 </Column>
@@ -96,25 +91,30 @@
             <div v-else>Loading data or no data available...</div>
         </template>
     </Card>
-    <ShowUser
+
+    <ShowContact
         v-bind:visible="visibleShow"
-        v-bind:user="selectedObject"
+        v-bind:contact="selectedObject"
         v-bind:close="closeModal"
     />
-    <CreateUser
+    <CreateContact
+        v-bind:getAllContacts="getAllContacts"
         v-bind:visible="visibleCreate"
-        v-bind:getAllUsers="getAllUsers"
         v-bind:options="roleOptions"
         v-bind:close="closeModal"
     />
-    <EditUser
+    <EditContact
+        v-bind:contact="selectedObject"
+        v-bind:getAllContacts="getAllContacts"
         v-bind:visible="visibleEdit"
-        v-bind:user="selectedObject"
-        v-bind:getAllUsers="getAllUsers"
         v-bind:options="roleOptions"
         v-bind:close="closeModal"
     />
-    <Dialog v-bind:visible="visibleDelete" modal header="Confirm delete user">
+    <Dialog
+        v-model:visible="visibleDelete"
+        modal
+        header="Confirm delete contact"
+    >
         <div class="flex justify-content-between">
             <Button
                 severity="secondary"
@@ -124,7 +124,7 @@
             />
             <Button
                 label="Confirm"
-                @click="deleteUser(selectedObject)"
+                @click="deleteContact(selectedObject)"
                 class="smallHeightButton"
             />
         </div>
@@ -135,22 +135,20 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
-import { UserInterface } from '../../../interfaces'
-
-import CreateUser from './CreateUser.vue'
-import ShowUser from './ShowUser.vue'
-import EditUser from './EditUser.vue'
+import CreateContact from './CreateContact.vue'
+import ShowContact from './ShowContact.vue'
+import EditContact from './EditContact.vue'
 
 import {
-    userApiMethods,
+    contactApiMethods,
     useApiErrors,
     useFlashToast,
     useModal,
-} from '../../../utils'
+} from '../../utils'
+import { ContactInterface } from '../../interfaces'
 
-const { results, getAllUsers } = userApiMethods()
-const { apiErrors } = useApiErrors()
 const { flashToast } = useFlashToast()
+const { apiErrors } = useApiErrors()
 const {
     visibleShow,
     visibleCreate,
@@ -161,10 +159,9 @@ const {
     openModal,
     closeModal,
 } = useModal()
+const { results, getAllContacts } = contactApiMethods()
 
-defineProps<{
-    roleOptions: string[]
-}>()
+const roleOptions = ['user', 'tech', 'test_admin', 'admin', 'super_admin']
 
 /**
  * Menu variables and function
@@ -202,26 +199,32 @@ const items = ref([
     },
 ])
 
-function openMenu(event: MouseEvent, user: UserInterface): void {
-    if (user) {
-        setSelectedObject(user)
+function openMenu(event: MouseEvent, contact: ContactInterface): void {
+    if (contact) {
+        setSelectedObject(contact)
     }
     menu.value.toggle(event)
 }
 
 /**
- * Fetch users after component mounts
+ * Fetch contacts after component mounts
  */
-onMounted(getAllUsers)
+onMounted(getAllContacts)
 
-function deleteUser(user: any): void {
+/**
+ * HTTP requests functions
+ */
+function deleteContact(contact: any): void {
     axios
-        .delete(`/api/users/${user.data.id}`)
+        .delete(`/api/contacts/${contact.data.id}`)
         .then(async () => {
             closeModal('delete')
-            await getAllUsers()
+            await getAllContacts()
 
-            flashToast('Successfully deleted: ' + user.data.name, 'success')
+            flashToast(
+                'Successfully deleted: ' + contact.data.full_name,
+                'success'
+            )
         })
         .catch((error) => {
             closeModal('delete')
