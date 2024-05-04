@@ -1,18 +1,19 @@
 <?php
 
 
-describe('401', function() {
+describe('401', function () {
     test('unauthorized index api', apiTest(
         'GET',
-        'contacts.index',
+        'articles.index',
         401,
         null,
         ['message'],
         ['message' => 'Unauthenticated.']
     ));
+
     test('unauthorized show api', apiTest(
         'SHOW',
-        'contacts.show',
+        'articles.show',
         401,
         1,
         ['message'],
@@ -21,16 +22,16 @@ describe('401', function() {
 
     test('unauthorized store api with data', apiTest(
         'POST',
-        'contacts.store',
+        'articles.store',
         401,
-        data,
+        articleData,
         ['message'],
         ['message' => 'Unauthenticated.']
     ));
 
     test('unauthorized store api empty json', apiTest(
         'POST',
-        'contacts.store',
+        'articles.store',
         401,
         [],
         ['message'],
@@ -39,16 +40,16 @@ describe('401', function() {
 
     test('unauthorized update api with data', apiTest(
         'PUT',
-        'users.update',
+        'articles.update',
         401,
-        data,
+        articleData,
         ['message'],
         ['message' => 'Unauthenticated.']
     ));
 
     test('unauthorized update api empty json', apiTest(
         'PUT',
-        'contacts.update',
+        'articles.update',
         401,
         [],
         ['message'],
@@ -57,7 +58,7 @@ describe('401', function() {
 
     test('unauthorized destroy api', apiTest(
         'DELETE',
-        'contacts.destroy',
+        'articles.destroy',
         401,
         null,
         ['message'],

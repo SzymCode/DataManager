@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\Auth\UserController;
-use App\Http\Requests\User\PostRequest;
-use App\Http\Requests\User\PutRequest;
-use App\Models\User;
-use App\Services\UserService;
+use App\Http\Controllers\ArticleController;
+use App\Http\Requests\Article\PostRequest;
+use App\Http\Requests\Article\PutRequest;
+use App\Models\Article;
+use App\Services\ArticleService;
 
 beforeEach(function () {
     $this->createUsers();
     $this->actingAs($this->admin);
-    $this->controller = app()->makeWith(UserController::class, ['userService' => app()->make(UserService::class)]);
+    $this->controller = app()->makeWith(ArticleController::class, ['articleService' => app()->make(ArticleService::class)]);
 });
 
 it('runs index method successfully', function () {
@@ -20,9 +20,9 @@ it('runs index method successfully', function () {
 });
 
 it('runs show method successfully', function () {
-    $user = User::factory()->create();
+    $article = Article::factory()->create();
 
-    $response = $this->controller->show($user->id);
+    $response = $this->controller->show($article->id);
 
     expect($response->getStatusCode())->toEqual(200);
     expect($response->getData(true));
@@ -31,7 +31,7 @@ it('runs show method successfully', function () {
 it('runs store method successfully', function () {
     $request = Mockery::mock(PostRequest::class);
     $request->shouldReceive('validated')
-        ->andReturn(userData);
+        ->andReturn(articleData);
 
     $response = $this->controller->store($request);
 
@@ -40,23 +40,23 @@ it('runs store method successfully', function () {
 });
 
 it('runs update method successfully', function () {
-    $user = User::factory()->create();
+    $article = Article::factory()->create();
 
     $request = Mockery::mock(PutRequest::class);
     $request->shouldReceive('validated')
-        ->andReturn(updatedUserData);
+        ->andReturn(updatedArticleData);
 
-    $response = $this->controller->update($request, $user->id);
+    $response = $this->controller->update($request, $article->id);
 
     expect($response->getStatusCode())->toEqual(200);
     expect($response->getData(true));
 });
 
 it('runs delete method successfully', function () {
-    $user = User::factory()->create();
+    $article = Article::factory()->create();
 
-    $response = $this->controller->destroy($user->id);
+    $response = $this->controller->destroy($article->id);
 
     expect($response->getStatusCode())->toEqual(200);
-    $this->assertDatabaseMissing('users', ['id' => $user->id]);
+    $this->assertDatabaseMissing('articles', ['id' => $article->id]);
 });
