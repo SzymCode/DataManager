@@ -1,8 +1,12 @@
 @use 'mixins' as *;
 
+.p-inputtext {
+    font-size: 1em;
+}
+
 @each $type in main, activity, article, contact, user {
-    .p-colorpicker[v-type='#{$type}'] {
-        @include entity-colorpicker-styles(
+    .p-inputtext[v-type='#{$type}'] {
+        @include entity-inputtext-styles(
             var(--#{$type}-item-color-new),
             var(--#{$type}-item-focus-color-new)
         );
