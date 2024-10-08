@@ -107,6 +107,7 @@
     text-decoration: $links-text-decoration;
     color: $primary-text-color;
     transition: $transition-colors-300ms;
+    z-index: 1;
 }
 
 .back-link:hover {
