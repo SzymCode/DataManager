@@ -1,6 +1,5 @@
 @import '../../../variables/pages/auth/auth_variables';
 
-@import '../../../variables/base/box_shadows_variables';
 @import '../../../variables/base/colors_variables';
 @import '../../../variables/base/fonts_variables';
 @import '../../../variables/base/medias_variables';
@@ -12,7 +11,9 @@
 }
 
 .auth-card-container {
-    height: $auth-card-container-height;
+    position: absolute;
+    height: 100%;
+    width: 100%;
     padding: $auth-card-container-padding;
     display: $auth-card-container-display;
     flex-direction: $auth-card-container-flex-direction;
@@ -22,7 +23,8 @@
     .login-card,
     .register-card {
         position: $auth-card-position;
-        box-shadow: $primary-box-shadow;
+        box-shadow: none;
+        margin: auto 0;
 
         .auth-card-header-container {
             display: $auth-card-header-container-display;
@@ -89,13 +91,11 @@
     .login-card {
         width: $auth-card-width;
         max-width: $auth-card-max-width;
-        margin-top: $login-card-margin-top;
     }
 
     .register-card {
         width: $auth-card-width;
         max-width: $auth-card-max-width;
-        margin-top: $register-card-margin-top;
     }
 }
 
