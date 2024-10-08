@@ -1,17 +1,17 @@
 <template>
     <div class="test-buttons-container">
         <ad-button
-            label="Test Admin Login"
+            icon="pi pi-user-edit"
             @click="testLogin('admin')"
-            class="primary-button text-sm"
             :rounded="true"
+            v-tooltip.top="'Test Admin login'"
         />
         <ad-button
-            label="Test User Login"
+            icon="pi pi-user"
             severity="secondary"
             @click="testLogin('user')"
-            class="primary-button text-sm"
             :rounded="true"
+            v-tooltip.top="'Test User login'"
         />
     </div>
 </template>

@@ -5,6 +5,11 @@
 @import '../../../variables/base/fonts_variables';
 @import '../../../variables/base/medias_variables';
 
+#login,
+#register {
+    overflow: hidden;
+}
+
 .auth-card-container {
     height: $auth-card-container-height;
     padding: $auth-card-container-padding;
