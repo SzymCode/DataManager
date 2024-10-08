@@ -30,4 +30,8 @@ registerOrganisms(app)
 registerTemplates(app)
 registerGlobalUtils(app)
 
+import InvisibleRecaptcha from 'vue-invisible-recaptcha'
+
+app.component('invisible-recaptcha', InvisibleRecaptcha)
+
 app.mount('#app')

@@ -6,6 +6,7 @@ import {
     DataTableSkeleton,
     Dialog,
     Dock,
+    InvisibleRecaptcha,
     OverlayPanel,
     Password,
     Terminal,
@@ -34,6 +35,11 @@ export default function registerOrganisms(app: AppType): void {
          *  Dock
          */
         .component('ad-dock', Dock)
+
+        /**
+         *  InvisibleRecaptcha
+         */
+        .component('ad-invisible-recaptcha', InvisibleRecaptcha)
 
         /**
          *  OverlayPanel
