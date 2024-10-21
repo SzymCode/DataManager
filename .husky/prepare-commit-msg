@@ -23,6 +23,9 @@ case "$CURRENT_BRANCH" in
     storybook)
         FINAL_MSG="Storybook: $ORIGINAL_MSG"
         ;;
+    ui-corrections)
+        FINAL_MSG="UI corrections: $ORIGINAL_MSG"
+        ;;
     workflow)
         FINAL_MSG="Workflow: $ORIGINAL_MSG"
         ;;
